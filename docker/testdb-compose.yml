@@ -13,5 +13,3 @@ services:
       - PORT=${PORT}
       - API_KEY=${API_KEY}
       - TESTING=1
-      - POSTGRES_URL=postgresql://test:test@postgres:5432/test
-      - TEST_POSTGRES_URL=postgresql://test:test@postgres:5432/test
