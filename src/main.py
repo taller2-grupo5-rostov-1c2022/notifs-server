@@ -1,27 +1,18 @@
-from typing import Optional
+from fastapi import (
+    FastAPI,
+    Depends,
+)
+from src.app import tokens, messages
+from src.middleware.utils import get_api_key
 
-from fastapi import FastAPI
-from pydantic import BaseModel
+API_VERSION_PREFIX = "/api/v3"
 
-app = FastAPI()
+app = FastAPI(
+    title="Notifs API",
+    description="Spotifiuby's API to manage notifications",
+    version="0.0.1",
+    dependencies=[Depends(get_api_key)],
+)
 
-
-class Item(BaseModel):
-    name: str
-    price: float
-    is_offer: Optional[bool] = None
-
-
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
-
-
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Optional[str] = None):
-    return {"item_id": item_id, "q": q}
-
-
-@app.put("/items/{item_id}")
-def update_item(item_id: int, item: Item):
-    return {"item_name": item.name, "item_id": item_id}
+app.include_router(tokens.router, prefix=API_VERSION_PREFIX)
+app.include_router(messages.router, prefix=API_VERSION_PREFIX)

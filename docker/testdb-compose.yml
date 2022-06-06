@@ -1,0 +1,17 @@
+version: "3.9"
+services:
+  fastapi-server:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    ports:
+      - ${PORT}:${PORT}
+    volumes:
+      - ../src:/code/src
+      - ../tests:/code/tests
+    environment:
+      - PORT=${PORT}
+      - API_KEY=${API_KEY}
+      - TESTING=1
+      - POSTGRES_URL=postgresql://test:test@postgres:5432/test
+      - TEST_POSTGRES_URL=postgresql://test:test@postgres:5432/test
