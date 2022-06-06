@@ -6,11 +6,6 @@ class TokenPost(BaseModel):
     uid: str
 
 
-class NotifyBase(BaseModel):
+class NotificationBase(BaseModel):
     title: str
     body: str
-
-
-class MessageBase(BaseModel):
-    message: str
-    notify: NotifyBase

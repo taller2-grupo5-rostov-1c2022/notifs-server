@@ -5,20 +5,25 @@ from src.firebase.access import get_db
 from firebase_admin import messaging
 
 
-def retrieve_token(uid: str, db=Depends(get_db)):
-    """Retrieve a token by its uid"""
-
+def get_token(uid: str, db):
     token = db.collection("tokens").document(uid).get()
-    if token is None:
-        raise HTTPException(status_code=404, detail="Token not found")
+    if not token.exists:
+        raise HTTPException(status_code=404, detail=f"Token for user {uid} not found")
+
     return token.to_dict()["token"]
 
 
-def send_message(message_info: schemas.MessageBase, token: str):
+def send_notification(
+    notification: schemas.NotificationBase, token: str, sender_uid: str
+):
     """Send a message to a user"""
 
     message = messaging.Message(
-        data=message_info.dict(),
+        notification=messaging.Notification(
+            title=notification.title, body=notification.body
+        ),
+        data={"sender_uid": sender_uid},
         token=token,
     )
+
     messaging.send(message)

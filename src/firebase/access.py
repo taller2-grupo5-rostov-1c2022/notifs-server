@@ -13,9 +13,12 @@ load_dotenv()
 db = db_mock
 _auth = auth_mock
 
-if not TESTING:
+
+if TESTING is None:
     # Use a service account
     # Si tira error porque no encuentra el archivo, copiar el google-credentials.json a /src
+    print("PROD DB")
+
     with open("google-credentials.json") as json_file:
         cert_dict = json.load(json_file, strict=False)
 

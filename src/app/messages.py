@@ -10,12 +10,13 @@ router = APIRouter(tags=["messages"])
 
 @router.post("/messages/")
 def post_message(
-    message_info: schemas.MessageBase,
+    notification: schemas.NotificationBase,
     target_uid: str = Header(...),
     uid: str = Header(...),
+    db=Depends(get_db),
 ):
     """Send a message notification to a user"""
 
-    message_info.uid = uid
-    token = message_utils.retrieve_token(target_uid)
-    message_utils.send_message(message_info, token)
+    token = message_utils.get_token(target_uid, db)
+
+    message_utils.send_notification(notification, token, uid)
