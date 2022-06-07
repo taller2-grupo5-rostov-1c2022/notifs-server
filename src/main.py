@@ -5,7 +5,7 @@ from fastapi import (
 from src.app import tokens, messages
 from src.middleware.utils import get_api_key
 
-API_VERSION_PREFIX = "/api/v3"
+API_VERSION_PREFIX = "/api/v1"
 
 app = FastAPI(
     title="Notifs API",
