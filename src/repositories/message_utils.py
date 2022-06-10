@@ -1,5 +1,5 @@
 from fastapi import Depends, HTTPException
-
+import json
 from src import schemas
 from src.firebase.access import get_db
 from firebase_admin import messaging
@@ -19,10 +19,14 @@ def send_notification(
     """Send a message to a user"""
 
     message = messaging.Message(
-        notification=messaging.Notification(
-            title=notification.title, body=notification.body
-        ),
-        data={"sender_uid": sender_uid},
+        data={
+            "body": json.dumps({
+                "sender_uid": sender_uid,
+                "type": "message"
+            }),
+            "title": notification.title,
+            "message": notification.body,
+        },
         token=token,
     )
 
