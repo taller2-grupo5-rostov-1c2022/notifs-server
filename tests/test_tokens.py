@@ -5,8 +5,8 @@ from src.main import API_VERSION_PREFIX
 def test_post_one_token(client):
     response = client.post(
         f"{API_VERSION_PREFIX}/tokens/",
-        json={"token": "token_for_my_uid", "uid": "my_uid"},
-        headers={"api_key": "key"},
+        json={"token": "token_for_my_uid"},
+        headers={"api_key": "key", "uid": "my_uid"},
     )
 
     document = db_mock.collection("tokens").document("my_uid").get()
@@ -19,15 +19,15 @@ def test_post_two_tokens(client):
 
     response = client.post(
         f"{API_VERSION_PREFIX}/tokens/",
-        json={"token": "token_for_my_uid", "uid": "my_uid"},
-        headers={"api_key": "key"},
+        json={"token": "token_for_my_uid"},
+        headers={"api_key": "key", "uid": "my_uid"},
     )
     assert response.status_code == 200
 
     response = client.post(
         f"{API_VERSION_PREFIX}/tokens/",
-        json={"token": "token_for_another_uid", "uid": "another_uid"},
-        headers={"api_key": "key"},
+        json={"token": "token_for_another_uid"},
+        headers={"api_key": "key", "uid": "another_uid"},
     )
     assert response.status_code == 200
 
@@ -43,15 +43,15 @@ def test_post_two_tokens(client):
 def test_post_token_for_the_same_uid_twice_replaces_old_token(client):
     response = client.post(
         f"{API_VERSION_PREFIX}/tokens/",
-        json={"token": "token_for_my_uid", "uid": "my_uid"},
-        headers={"api_key": "key"},
+        json={"token": "token_for_my_uid"},
+        headers={"api_key": "key", "uid": "my_uid"},
     )
     assert response.status_code == 200
 
     response = client.post(
         f"{API_VERSION_PREFIX}/tokens/",
-        json={"token": "new_token", "uid": "my_uid"},
-        headers={"api_key": "key"},
+        json={"token": "new_token"},
+        headers={"api_key": "key", "uid": "my_uid"},
     )
     assert response.status_code == 200
 
@@ -63,13 +63,13 @@ def test_post_token_for_the_same_uid_twice_replaces_old_token(client):
 def test_delete_token(client):
     response = client.post(
         f"{API_VERSION_PREFIX}/tokens/",
-        json={"token": "token_for_my_uid", "uid": "my_uid"},
-        headers={"api_key": "key"},
+        json={"token": "token_for_my_uid"},
+        headers={"api_key": "key", "uid": "my_uid"},
     )
     assert response.status_code == 200
 
     response = client.delete(
-        f"{API_VERSION_PREFIX}/tokens/my_uid", headers={"api_key": "key"}
+        f"{API_VERSION_PREFIX}/tokens/", headers={"api_key": "key", "uid": "my_uid"}
     )
     assert response.status_code == 200
 
@@ -79,6 +79,6 @@ def test_delete_token(client):
 
 def test_delete_token_for_non_existing_uid(client):
     response = client.delete(
-        f"{API_VERSION_PREFIX}/tokens/my_uid", headers={"api_key": "key"}
+        f"{API_VERSION_PREFIX}/tokens/", headers={"api_key": "key", "uid": "my_uid"}
     )
     assert response.status_code == 404
