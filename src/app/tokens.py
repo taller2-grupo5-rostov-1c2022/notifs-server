@@ -1,8 +1,9 @@
 from fastapi import APIRouter
-from fastapi import Depends, HTTPException, UploadFile
+from fastapi import Depends
 
 from src import schemas
 from src.firebase.access import get_db
+from src.repositories import token_utils
 
 router = APIRouter(tags=["tokens"])
 
@@ -24,8 +25,5 @@ def post_token(
 @router.delete("/tokens/{uid}")
 def delete_token(uid: str, db=Depends(get_db)):
     """Delete a token"""
-    document = db.collection("tokens").document(uid)
-    if document.get().exists:
-        document.delete()
-    else:
-        raise HTTPException(status_code=404, detail=f"Token for {uid} not found")
+
+    token_utils.delete_token(uid, db)
