@@ -14,7 +14,7 @@ db = db_mock
 _auth = auth_mock
 
 
-if TESTING is None:
+if TESTING is not None:
     # Use a service account
     # Si tira error porque no encuentra el archivo, copiar el google-credentials.json a /src
     print("PROD DB")
@@ -31,6 +31,9 @@ if TESTING is None:
     db = firestore.client()
 
     _auth = auth
+
+else:
+    print("TEST DB")
 
 
 def get_db():
