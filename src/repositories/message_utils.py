@@ -1,28 +1,29 @@
+from fastapi import Depends, HTTPException
+
 from src import schemas
+from src.firebase.access import get_db
+from firebase_admin import messaging
 
-from exponent_server_sdk import (
-    DeviceNotRegisteredError,
-    PushClient,
-    PushMessage,
-)
 
-from src.repositories import token_utils
+def get_token(uid: str, db):
+    token = db.collection("tokens").document(uid).get()
+    if not token.exists:
+        raise HTTPException(status_code=404, detail=f"Token for user {uid} not found")
+
+    return token.to_dict()["token"]
 
 
 def send_notification(
-    notification: schemas.NotificationBase, recv_uid: str, sender_uid: str, db
+    notification: schemas.NotificationBase, token: str, sender_uid: str
 ):
     """Send a message to a user"""
 
-    token = token_utils.get_token(recv_uid, db)
-
-    response = PushClient().publish(
-        PushMessage(to=token, body=notification.dict(), data={"sender_uid": sender_uid})
+    message = messaging.Message(
+        notification=messaging.Notification(
+            title=notification.title, body=notification.body
+        ),
+        data={"sender_uid": sender_uid},
+        token=token,
     )
-    try:
-        # We got a response back, but we don't know whether it's an error yet.
-        # This call raises errors, so we can handle them with normal exception
-        # flows.
-        response.validate_response()
-    except DeviceNotRegisteredError:
-        token_utils.delete_token(sender_uid, db)
+
+    messaging.send(message)

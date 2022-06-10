@@ -1,5 +1,6 @@
 from fastapi import APIRouter
-from fastapi import Depends, Header
+from fastapi import Depends, HTTPException, UploadFile, Header
+from firebase_admin import messaging
 from src import schemas
 from src.firebase.access import get_db
 from src.repositories import message_utils
@@ -16,4 +17,6 @@ def post_message(
 ):
     """Send a message notification to a user"""
 
-    message_utils.send_notification(notification, target_uid, uid, db)
+    token = message_utils.get_token(target_uid, db)
+
+    message_utils.send_notification(notification, token, uid)

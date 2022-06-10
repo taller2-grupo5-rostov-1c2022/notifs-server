@@ -14,7 +14,7 @@ db = db_mock
 _auth = auth_mock
 
 
-if TESTING is not None:
+if TESTING is None:
     # Use a service account
     # Si tira error porque no encuentra el archivo, copiar el google-credentials.json a /src
     print("PROD DB")
