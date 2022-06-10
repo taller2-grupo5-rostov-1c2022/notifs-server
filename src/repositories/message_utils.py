@@ -20,10 +20,7 @@ def send_notification(
 
     message = messaging.Message(
         data={
-            "body": json.dumps({
-                "sender_uid": sender_uid,
-                "type": "message"
-            }),
+            "body": json.dumps({"sender_uid": sender_uid, "type": "message"}),
             "title": notification.title,
             "message": notification.body,
         },
