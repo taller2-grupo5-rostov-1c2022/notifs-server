@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from fastapi import Depends, HTTPException, UploadFile
+from fastapi import Depends
 
 from src import schemas
 from src.firebase.access import get_db
