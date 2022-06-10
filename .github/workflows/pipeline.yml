@@ -99,12 +99,18 @@ jobs:
     if: github.ref == 'refs/heads/master'
     needs: [linting, tests_and_coverage]
     runs-on: ubuntu-latest
+    environment:
+      name: Production
+      url: "https://rostov-notifs-server.herokuapp.com/docs"
     steps:
       - uses: actions/checkout@v2
-      - name: 'Copy and rename dockerfile' # workaround, consider using https://github.com/marketplace/actions/build-push-and-release-a-docker-container-to-heroku
+      - name: "Copy and rename dockerfile" # workaround
         run: |
-          mv heroku-Dockerfile Dockerfile
+          chmod +x ./scripts/cp-root.sh
+          ./scripts/cp-root.sh
       - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
+        env:
+          HD_API_KEY: ${{secrets.API_KEY}}
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
