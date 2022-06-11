@@ -20,7 +20,7 @@ def send_notification(
     if not notification.extra:
         extra = {}
     else:
-        extra = notification.extra
+        extra = json.loads(notification.extra)
     extra["sender_uid"] = sender_uid
     message = messaging.Message(
         data={

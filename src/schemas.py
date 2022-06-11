@@ -10,4 +10,4 @@ class TokenPost(BaseModel):
 class NotificationBase(BaseModel):
     title: str
     body: str
-    extra: Optional[dict]
+    extra: Optional[str]
