@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic.main import BaseModel
 
 
@@ -8,3 +10,4 @@ class TokenPost(BaseModel):
 class NotificationBase(BaseModel):
     title: str
     body: str
+    extra: Optional[dict]

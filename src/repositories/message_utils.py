@@ -1,7 +1,6 @@
-from fastapi import Depends, HTTPException
+from fastapi import HTTPException
 import json
 from src import schemas
-from src.firebase.access import get_db
 from firebase_admin import messaging
 
 
@@ -18,9 +17,14 @@ def send_notification(
 ):
     """Send a message to a user"""
 
+    if not notification.extra:
+        extra = {}
+    else:
+        extra = notification.extra
+    extra["sender_uid"] = sender_uid
     message = messaging.Message(
         data={
-            "body": json.dumps({"sender_uid": sender_uid, "type": "message"}),
+            "body": json.dumps(extra),
             "title": notification.title,
             "message": notification.body,
         },
