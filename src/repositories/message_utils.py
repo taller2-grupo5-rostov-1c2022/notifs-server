@@ -22,6 +22,7 @@ def send_notification(
     else:
         extra = json.loads(notification.extra)
     extra["sender_uid"] = sender_uid
+    extra["type"] = "message"
     message = messaging.Message(
         data={
             "body": json.dumps(extra),
