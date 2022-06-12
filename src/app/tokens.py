@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Header, Depends, HTTPException
+from fastapi import APIRouter, Header, Depends
 
 from src import schemas
 from src.firebase.access import get_db
