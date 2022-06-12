@@ -2,7 +2,7 @@ from fastapi import (
     FastAPI,
     Depends,
 )
-from src.app import tokens, messages
+from src.app import tokens, messages, notifications
 from src.middleware.utils import get_api_key
 
 API_VERSION_PREFIX = "/api/v1"
@@ -16,3 +16,4 @@ app = FastAPI(
 
 app.include_router(tokens.router, prefix=API_VERSION_PREFIX)
 app.include_router(messages.router, prefix=API_VERSION_PREFIX)
+app.include_router(notifications.router, prefix=API_VERSION_PREFIX)
