@@ -16,6 +16,8 @@ def store_notification(notification: schemas.NotificationBase, receiver_uid: str
     """Store a notification in the database"""
 
     user_notifications = db.collection("notifications").document(receiver_uid)
+    if not user_notifications.get().exists:
+        user_notifications.set({'notifications': []})
     user_notifications.update({'notifications': firestore.ArrayUnion([notification.dict()])})
 
 
