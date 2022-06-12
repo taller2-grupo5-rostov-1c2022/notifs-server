@@ -18,7 +18,7 @@ def post_message(
     """Send a message notification to a user"""
 
     token = message_utils.get_token(target_uid, db)
-    
+
     notifications_utils.store_notification(notification, target_uid, db)
 
     message_utils.send_notification(notification, token, uid)
