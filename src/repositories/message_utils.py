@@ -12,10 +12,9 @@ def get_token(uid: str, db):
     return token.to_dict()["token"]
 
 
-def send_notification(
-    notification: schemas.NotificationBase, token: str, sender_uid: str
-):
-    """Send a message to a user"""
+def parse_message_data(notification: schemas.NotificationBase, sender_uid: str):
+
+    """Return a message dict from a notification"""
 
     if not notification.extra:
         extra = {}
@@ -23,12 +22,21 @@ def send_notification(
         extra = json.loads(notification.extra)
     extra["sender_uid"] = sender_uid
     extra["type"] = "message"
+    data = {
+        "body": json.dumps(extra),
+        "title": notification.title,
+        "message": notification.body,
+    }
+
+    return data
+
+
+def send_message(data: dict, token: str):
+
+    """Return a message dict from a notification"""
+
     message = messaging.Message(
-        data={
-            "body": json.dumps(extra),
-            "title": notification.title,
-            "message": notification.body,
-        },
+        data=data,
         token=token,
     )
 

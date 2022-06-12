@@ -1,4 +1,3 @@
-from src import schemas
 from google.cloud import firestore
 
 
@@ -12,13 +11,13 @@ def get_notifications(uid: str, db):
     return notifications.to_dict()["notifications"]
 
 
-def store_notification(notification: schemas.NotificationBase, receiver_uid: str, db):
+def store_notification(message_data: str, receiver_uid: str, db):
     """Store a notification in the database"""
 
     user_notifications = db.collection("notifications").document(receiver_uid)
     if not user_notifications.get().exists:
         user_notifications.set({'notifications': []})
-    user_notifications.update({'notifications': firestore.ArrayUnion([notification.dict()])})
+    user_notifications.update({'notifications': firestore.ArrayUnion([message_data])})
 
 
 def clear_notifications(uid: str, db):
