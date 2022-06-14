@@ -20,7 +20,7 @@ def parse_message_data(notification: schemas.NotificationBase, sender_uid: str):
         "sender_uid": sender_uid,
         "type": "message"
     }
-    
+
     data = {
         "body": json.dumps(body),
         "title": notification.title,
