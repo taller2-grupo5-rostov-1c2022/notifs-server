@@ -16,14 +16,13 @@ def parse_message_data(notification: schemas.NotificationBase, sender_uid: str):
 
     """Return a message dict from a notification"""
 
-    if not notification.extra:
-        extra = {}
-    else:
-        extra = json.loads(notification.extra)
-    extra["sender_uid"] = sender_uid
-    extra["type"] = "message"
+    body = {
+        "sender_uid": sender_uid,
+        "type": "message"
+    }
+    
     data = {
-        "body": json.dumps(extra),
+        "body": json.dumps(body),
         "title": notification.title,
         "message": notification.body,
     }
