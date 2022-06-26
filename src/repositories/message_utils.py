@@ -16,10 +16,7 @@ def parse_message_data(notification: schemas.NotificationBase, sender_uid: str):
 
     """Return a message dict from a notification"""
 
-    body = {
-        "sender_uid": sender_uid,
-        "type": "message"
-    }
+    body = {"sender_uid": sender_uid, "type": "message"}
 
     data = {
         "body": json.dumps(body),
