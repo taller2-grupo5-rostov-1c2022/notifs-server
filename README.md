@@ -4,7 +4,7 @@
 [![](https://img.shields.io/badge/docs-fastapi-blue.svg)](https://fastapi.tiangolo.com/)
 
 
-# FastAPI template
+# Spotifiuby Notifications Server
 
 
 ## Installing the project
@@ -47,7 +47,7 @@ $ source .venv/bin/activate
 Check the [full poetry docs](https://python-poetry.org/docs/cli/), but here goes a quick reminder,
 
 ```bash
-poetry add <dependency> [--dev]
+$ poetry add <dependency> [--dev]
 ```
 
 ### Style guide
@@ -63,19 +63,63 @@ For this purpose, we use:
 **Linters**
 
 ```bash
-flake8 && pylint <module_name>
+$ flake8 && pylint <module_name>
 ```
 
 **Formatter**
 ```bash
-black .
+$ black .
 ```
 
 ## Running the server
 
 - Development: `uvicorn src.main:app --reload`
 - Production: `uvicorn src.main:app`
-- Production Container: `docker-compose up -d`
+
+## Docker
+
+You need [docker-compose](https://docs.docker.com/compose/) and [docker](https://docs.docker.com/) to run the following containers
+and commands.
+
+### Developing with container and database
+
+```bash
+$ sudo ./scripts/test-container.sh
+```
+
+### Running tests within container
+
+You have two options here, one is simple running:
+
+```bash
+$ sudo ./scripts/coverage-container.sh
+```
+
+which will execute all the tests and will exit the container afterwards.
+
+Alternately, you can also run a container which will run the app and will provide the database. In one terminal run:
+
+```bash
+$ sudo ./scripts/test-container.sh
+```
+
+Then in other terminal run `docker ps` and copy the `container ID` from the `docker_fastapi-server` image:
+
+```bash
+$ docker ps
+CONTAINER ID   IMAGE                   COMMAND                  CREATED              STATUS              PORTS                                       NAMES
+b1e9c7c4e040   docker_fastapi-server   "./docker-entrypoint…"   About a minute ago   Up About a minute   0.0.0.0:8082->8082/tcp, :::8082->8082/tcp   docker_fastapi-server_1
+620c0b75ce2a   postgres:13             "docker-entrypoint.s…"   About a minute ago   Up About a minute   0.0.0.0:5438->5432/tcp, :::5438->5432/tcp   docker_postgres_1
+```
+
+Finally, enter the container with `docker exec -it [container-id] bash` and run the tests within the container using `poetry run pytest`:
+
+```bash
+$ docker exec -it [container-id] bash
+$ root@b1e9c7c4e040:/code# ls
+docker-entrypoint.sh  poetry.lock  pyproject.toml  src  tests
+$ root@b1e9c7c4e040:/code# poetry run pytest
+```
 
 ## API Documentation
 
