@@ -55,3 +55,5 @@ class DBMock:
 
 db = DBMock()
 db.collections["tokens"] = CollectionMock()
+db.collections["notifications"] = CollectionMock()
+db.collections["messages"] = CollectionMock()

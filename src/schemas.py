@@ -7,6 +7,17 @@ class TokenPost(BaseModel):
     token: str
 
 
+class NotificationInfo(BaseModel):
+    sender_uid: str
+    type: str
+
+
+class NotificationGet(BaseModel):
+    title: str
+    message: str
+    body: NotificationInfo
+
+
 class NotificationBase(BaseModel):
     title: str
     body: str
