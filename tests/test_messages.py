@@ -51,7 +51,7 @@ def test_get_notifications_for_user(client, mocker):
     response = client.post(
         f"{API_VERSION_PREFIX}/messages/",
         json={"title": "title", "body": "body"},
-        headers={"api_key": "key", "uid": "my_uid", "target-uid": "my_uid"},
+        headers={"api_key": "key", "uid": "another_uid", "target-uid": "my_uid"},
     )
     assert response.status_code == 200
 
@@ -65,4 +65,6 @@ def test_get_notifications_for_user(client, mocker):
     assert len(notifications) == 1
     assert notifications[0]["title"] == "title"
     assert notifications[0]["message"] == "body"
-    assert notifications[0]["body"] == '{"sender_uid": "my_uid", "type": "message"}'
+    assert (
+        notifications[0]["body"] == '{"sender_uid": "another_uid", "type": "message"}'
+    )
