@@ -16,6 +16,6 @@ def get_token(uid: str, db):
 
     document = db.collection("tokens").document(uid)
     if document.get().exists:
-        return document.get().to_dict()
+        return document.get().to_dict()["token"]
     else:
         raise HTTPException(status_code=404, detail=f"Token for {uid} not found")

@@ -26,5 +26,4 @@ def send_message(data: dict, token: str):
         data=data,
         token=token,
     )
-
     messaging.send(message)
