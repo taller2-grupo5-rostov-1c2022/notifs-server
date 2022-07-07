@@ -1,3 +1,4 @@
 ignore:
   - "src/mocks"
   - "src/firebase"
+  - "src/middleware"
