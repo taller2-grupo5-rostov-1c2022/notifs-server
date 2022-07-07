@@ -17,6 +17,7 @@ firebase-admin = "^5.2.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
+autopep8 = "^1.6.0"
 
 [tool.pytest.ini_options]
 pythonpath = [

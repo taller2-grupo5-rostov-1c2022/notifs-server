@@ -1,9 +1,10 @@
 from fastapi import APIRouter
-from fastapi import Depends, HTTPException, UploadFile, Header
-from firebase_admin import messaging
+from fastapi import Depends, Header
 from src import schemas
+
+
 from src.firebase.access import get_db
-from src.repositories import message_utils
+from src.repositories import message_utils, notifications_utils
 
 router = APIRouter(tags=["messages"])
 
@@ -19,4 +20,8 @@ def post_message(
 
     token = message_utils.get_token(target_uid, db)
 
-    message_utils.send_notification(notification, token, uid)
+    message_data = message_utils.parse_message_data(notification, uid)
+
+    notifications_utils.store_notification(message_data, target_uid, db)
+
+    message_utils.send_message(message_data, token)
