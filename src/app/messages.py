@@ -4,7 +4,7 @@ from src import schemas
 
 
 from src.firebase.access import get_db
-from src.repositories import message_utils, notifications_utils
+from src.repositories import message_utils, notifications_utils, token_utils
 
 router = APIRouter(tags=["messages"])
 
@@ -18,7 +18,7 @@ def post_message(
 ):
     """Send a message notification to a user"""
 
-    token = message_utils.get_token(target_uid, db)
+    token = token_utils.get_token(target_uid, db)
 
     message_data = message_utils.parse_message_data(notification, uid)
 
